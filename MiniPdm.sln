@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3F407439-2560-427C-836D-0F6AB8407374}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniPdm.Core", "src\MiniPdm.Core\MiniPdm.Core.csproj", "{4C459466-008D-4A87-9ACD-CCD41748DE1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniPdm.Cad", "src\MiniPdm.Cad\MiniPdm.Cad.csproj", "{09BD2000-24BB-4979-9813-CE5355AA39ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniPdm.Data", "src\MiniPdm.Data\MiniPdm.Data.csproj", "{1C831A30-12E7-47FB-81C4-8F1F7AABD52F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniPdm.Cli", "src\MiniPdm.Cli\MiniPdm.Cli.csproj", "{D27FA1A3-05BA-442D-A62C-1ED32645E1C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniPdm.Wpf", "src\MiniPdm.Wpf\MiniPdm.Wpf.csproj", "{17F60989-FDF7-46F9-990A-432760F6225C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{50462AEA-1EE3-4CE6-B162-D060B2E79ADE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniPdm.Tests", "tests\MiniPdm.Tests\MiniPdm.Tests.csproj", "{38BC6E7A-AFE0-4055-B0B5-4F119370C043}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C459466-008D-4A87-9ACD-CCD41748DE1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C459466-008D-4A87-9ACD-CCD41748DE1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C459466-008D-4A87-9ACD-CCD41748DE1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C459466-008D-4A87-9ACD-CCD41748DE1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09BD2000-24BB-4979-9813-CE5355AA39ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09BD2000-24BB-4979-9813-CE5355AA39ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09BD2000-24BB-4979-9813-CE5355AA39ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09BD2000-24BB-4979-9813-CE5355AA39ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C831A30-12E7-47FB-81C4-8F1F7AABD52F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C831A30-12E7-47FB-81C4-8F1F7AABD52F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C831A30-12E7-47FB-81C4-8F1F7AABD52F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C831A30-12E7-47FB-81C4-8F1F7AABD52F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D27FA1A3-05BA-442D-A62C-1ED32645E1C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D27FA1A3-05BA-442D-A62C-1ED32645E1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D27FA1A3-05BA-442D-A62C-1ED32645E1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D27FA1A3-05BA-442D-A62C-1ED32645E1C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17F60989-FDF7-46F9-990A-432760F6225C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17F60989-FDF7-46F9-990A-432760F6225C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17F60989-FDF7-46F9-990A-432760F6225C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17F60989-FDF7-46F9-990A-432760F6225C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38BC6E7A-AFE0-4055-B0B5-4F119370C043}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38BC6E7A-AFE0-4055-B0B5-4F119370C043}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38BC6E7A-AFE0-4055-B0B5-4F119370C043}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38BC6E7A-AFE0-4055-B0B5-4F119370C043}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4C459466-008D-4A87-9ACD-CCD41748DE1C} = {3F407439-2560-427C-836D-0F6AB8407374}
+		{09BD2000-24BB-4979-9813-CE5355AA39ED} = {3F407439-2560-427C-836D-0F6AB8407374}
+		{1C831A30-12E7-47FB-81C4-8F1F7AABD52F} = {3F407439-2560-427C-836D-0F6AB8407374}
+		{D27FA1A3-05BA-442D-A62C-1ED32645E1C7} = {3F407439-2560-427C-836D-0F6AB8407374}
+		{17F60989-FDF7-46F9-990A-432760F6225C} = {3F407439-2560-427C-836D-0F6AB8407374}
+		{38BC6E7A-AFE0-4055-B0B5-4F119370C043} = {50462AEA-1EE3-4CE6-B162-D060B2E79ADE}
+	EndGlobalSection
+EndGlobal

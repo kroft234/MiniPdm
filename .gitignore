@@ -1,0 +1,40 @@
+## .NET
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## IDE
+.vs/
+.vscode/
+.idea/
+*.DotSettings.user
+
+## Test
+[Tt]est[Rr]esults/
+*.trx
+coverage*.xml
+coverage*.json
+
+## Локальная БД и артефакты запуска
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+logs/
+*.log
+
+## Входные данные задания (не коммитим — они идут приложением к PDF)
+cad-export/
+cad-export.zip
+cad-export-v2/
+
+## OS
+Thumbs.db
+Desktop.ini
+.DS_Store
