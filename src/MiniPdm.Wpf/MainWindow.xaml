@@ -1,0 +1,301 @@
+﻿<Window x:Class="MiniPdm.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:MiniPdm.Wpf.ViewModels"
+        xmlns:conv="clr-namespace:MiniPdm.Wpf.Converters"
+        Title="Mini-PDM — хранение конструкторской документации"
+        Height="780" Width="1320"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+
+        <!-- Преобразователь объявлен здесь, а не в App.xaml: из DataTemplate
+             статический поиск ресурса не поднимается к ресурсам приложения -->
+        <conv:BooleanToVisibilityConverter x:Key="BoolToVisible" />
+
+        <Style x:Key="ToolButton" TargetType="Button">
+            <Setter Property="Padding" Value="12,5" />
+            <Setter Property="Margin" Value="0,0,6,0" />
+            <Setter Property="MinWidth" Value="100" />
+        </Style>
+
+        <!-- Заголовок раздела правой части: линия снизу отделяет секции друг от друга -->
+        <Style x:Key="SectionHeader" TargetType="Border">
+            <Setter Property="BorderBrush" Value="#FFD0D0D0" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="Padding" Value="0,0,0,5" />
+            <Setter Property="Margin" Value="0,16,0,8" />
+        </Style>
+
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#FF555555" />
+        </Style>
+
+        <!-- Рамка карточки: массу и циклы удобно показывать именно карточками -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="BorderBrush" Value="#FFD0D0D0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="Background" Value="#FFFAFAFA" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+        </Style>
+
+        <Style x:Key="Badge" TargetType="Border">
+            <Setter Property="Background" Value="#FFEDEDED" />
+            <Setter Property="CornerRadius" Value="2" />
+            <Setter Property="Padding" Value="4,1" />
+            <Setter Property="Margin" Value="0,0,6,0" />
+        </Style>
+
+        <Style x:Key="BadgeText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+    </Window.Resources>
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Background="#FFF0F0F0" BorderBrush="#FFD0D0D0"
+                BorderThickness="0,0,0,1" Padding="8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource ToolButton}" Content="Импорт папки…"
+                            Command="{Binding ImportCommand}" />
+                    <Button Style="{StaticResource ToolButton}" Content="Обновить"
+                            Command="{Binding RefreshCommand}" />
+                    <Button Style="{StaticResource ToolButton}" Content="Утвердить"
+                            Command="{Binding ApproveCommand}" />
+                    <Button Style="{StaticResource ToolButton}" Content="Аннулировать"
+                            Command="{Binding CancelCommand}" />
+
+                    <TextBlock Text="Глубина:" VerticalAlignment="Center" Margin="16,0,6,0" />
+                    <TextBox Width="56" VerticalAlignment="Center"
+                             Text="{Binding MaxDepth, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <TextBox Width="240" Padding="4" VerticalAlignment="Center"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border DockPanel.Dock="Bottom" Background="#FFF6F6F6" BorderBrush="#FFD0D0D0"
+                BorderThickness="0,1,0,0" Padding="8,5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding StatusText}" TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Text="Выполняется…" FontWeight="SemiBold"
+                           Foreground="#FFB00020" VerticalAlignment="Center" Margin="10,0,0,0"
+                           Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisible}}" />
+            </Grid>
+        </Border>
+        <Grid DockPanel.Dock="Left" Width="340">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Каталог объектов" Margin="8,8,8,4"
+                       Style="{StaticResource SectionTitle}" />
+
+            <Grid Grid.Row="1">
+                <ListBox ItemsSource="{Binding Objects}"
+                         SelectedItem="{Binding SelectedObject}"
+                         HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="#FFE8E8E8" BorderThickness="0,0,0,1" Padding="0,5">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                                        <Border Style="{StaticResource Badge}">
+                                            <TextBlock Text="{Binding TypeText}"
+                                                       Style="{StaticResource BadgeText}" />
+                                        </Border>
+                                        <TextBlock Text="{Binding VersionText}"
+                                                   Style="{StaticResource BadgeText}"
+                                                   Foreground="#FF555555" />
+                                        <TextBlock Text="{Binding StateText}"
+                                                   Style="{StaticResource BadgeText}"
+                                                   Foreground="#FF006400" />
+                                        <TextBlock Text="{Binding MassText}"
+                                                   Style="{StaticResource BadgeText}"
+                                                   Foreground="#FF555555" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <TextBlock Text="Ничего не найдено. Нажмите «Импорт папки…»."
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           TextWrapping="Wrap" MaxWidth="250" TextAlignment="Center"
+                           Foreground="#FF888888"
+                           Visibility="{Binding IsEmptyList, Converter={StaticResource BoolToVisible}}" />
+            </Grid>
+        </Grid>
+
+        <Grid Margin="8">
+
+            <!-- Пока объект не выбран — приглашение вместо пустых секций -->
+            <TextBlock Text="Выберите объект в каталоге слева"
+                       FontSize="15" Foreground="#FF888888"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Visibility="{Binding HasSelection, Converter={StaticResource BoolToVisible}, ConverterParameter=invert}" />
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          Visibility="{Binding HasSelection, Converter={StaticResource BoolToVisible}}">
+                <StackPanel Margin="0,4,8,8">
+
+                    <!-- Карточка выбранного объекта -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding SelectionTitle}" FontSize="16" FontWeight="Bold"
+                                       TextTrimming="CharacterEllipsis" />
+                            <TextBlock Text="{Binding MassSummary}" Margin="0,4,0,0"
+                                       FontWeight="SemiBold" Foreground="#FF006400" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Состав изделия -->
+                    <Border Style="{StaticResource SectionHeader}">
+                        <TextBlock Text="Состав изделия" Style="{StaticResource SectionTitle}" />
+                    </Border>
+
+                    <TreeView ItemsSource="{Binding TreeNodes}" Margin="0,2">
+                        <TreeView.ItemContainerStyle>
+                            <!-- Узлы раскрываются по клику; корень открыт сразу -->
+                            <Style TargetType="TreeViewItem">
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                        <TreeView.ItemTemplate>
+                            <!-- HierarchicalDataTemplate подставляет Children как подузлы:
+                                 без этого дерево показало бы только корни -->
+                            <HierarchicalDataTemplate DataType="{x:Type vm:BomNodeViewModel}"
+                                                      ItemsSource="{Binding Children}">
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding QuantityText}" Margin="6,0,0,0"
+                                               Foreground="#FF006400" />
+                                    <TextBlock Text="{Binding TypeText}" Margin="8,0,0,0"
+                                               Foreground="#FF666666" />
+                                    <TextBlock Text="{Binding MassText}" Margin="8,0,0,0"
+                                               Foreground="#FF666666" />
+                                    <TextBlock Text="⚠ ЗАМЫКАЕТ ЦИКЛ" Margin="8,0,0,0" FontWeight="Bold"
+                                               Foreground="#FFB00020"
+                                               Visibility="{Binding IsCycle, Converter={StaticResource BoolToVisible}}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+
+                    <!-- Спецификация -->
+                    <Border Style="{StaticResource SectionHeader}">
+                        <TextBlock Text="Спецификация" Style="{StaticResource SectionTitle}" />
+                    </Border>
+
+                    <DataGrid ItemsSource="{Binding Specification}" AutoGenerateColumns="False"
+                              IsReadOnly="True" CanUserAddRows="False"
+                              GridLinesVisibility="Horizontal"
+                              HeadersVisibility="Column" RowHeaderWidth="0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Обозначение" Width="170"
+                                                Binding="{Binding Designation}" />
+                            <DataGridTextColumn Header="Наименование" Width="*"
+                                                Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Кол-во" Width="90"
+                                                Binding="{Binding TotalQuantity}" />
+                            <DataGridTextColumn Header="Масса, кг" Width="110"
+                                                Binding="{Binding TotalMassKg, StringFormat={}{0:0.###}}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <TextBlock Text="{Binding SpecificationSummary}" Margin="0,6,0,0"
+                               Foreground="#FF555555" />
+
+                    <!-- Масса и циклы -->
+                    <Border Style="{StaticResource SectionHeader}">
+                        <TextBlock Text="Масса и циклы" Style="{StaticResource SectionTitle}" />
+                    </Border>
+
+                    <TextBlock Text="{Binding MassHeadline}" FontSize="14" FontWeight="Bold"
+                               TextWrapping="Wrap" Margin="0,0,0,6" />
+
+                    <ItemsControl ItemsSource="{Binding MissingMass}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource Card}" BorderBrush="#FFB00020">
+                                    <StackPanel>
+                                        <TextBlock FontWeight="SemiBold"
+                                                   TextTrimming="CharacterEllipsis">
+                                            <Run Text="{Binding Designation, Mode=OneWay}" />
+                                            <Run Text=" " />
+                                            <Run Text="{Binding Name, Mode=OneWay}" />
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding Reason}" Foreground="#FFB00020"
+                                                   TextWrapping="Wrap" Margin="0,3,0,0" />
+                                        <TextBlock Text="{Binding Path}" Foreground="#FF555555"
+                                                   FontSize="11" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <ItemsControl ItemsSource="{Binding Cycles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource Card}" BorderBrush="#FFB00020">
+                                    <StackPanel>
+                                        <TextBlock Text="Циклическая ссылка" FontWeight="Bold"
+                                                   Foreground="#FFB00020" />
+                                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap"
+                                                   Margin="0,3,0,0" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- Версии -->
+                    <Border Style="{StaticResource SectionHeader}">
+                        <TextBlock Text="Версии объекта" Style="{StaticResource SectionTitle}" />
+                    </Border>
+
+                    <DataGrid ItemsSource="{Binding Versions}" AutoGenerateColumns="False"
+                              IsReadOnly="True" CanUserAddRows="False"
+                              GridLinesVisibility="Horizontal"
+                              HeadersVisibility="Column" RowHeaderWidth="0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Версия" Width="80"
+                                                Binding="{Binding VersionNo}" />
+                            <DataGridTextColumn Header="Состояние" Width="150"
+                                                Binding="{Binding StateText}" />
+                            <DataGridTextColumn Header="Материал" Width="*"
+                                                Binding="{Binding Material}" />
+                            <DataGridTextColumn Header="Масса, кг" Width="110"
+                                                Binding="{Binding MassKg, StringFormat={}{0:0.###}}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Window>
