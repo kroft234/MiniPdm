@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\MiniPdm.Core\MiniPdm.Core.csproj" />
+    <ProjectReference Include="..\MiniPdm.Cad\MiniPdm.Cad.csproj" />
+    <ProjectReference Include="..\MiniPdm.Data\MiniPdm.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jab" Version="0.12.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>MiniPdm.Cli</RootNamespace>
+  </PropertyGroup>
+
+</Project>
